@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MEDIDAS RESIDENCIAL JARDINS</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#f4f6f8;
+margin:0;
+}
+
+.container{
+max-width:900px;
+margin:auto;
+padding:30px;
+}
+
+.card{
+background:white;
+border-radius:12px;
+padding:25px;
+margin-bottom:20px;
+box-shadow:0 5px 15px rgba(0,0,0,0.08);
+}
+
+.resumo{
+background:#fafafa;
+border-left:5px solid #0a7a33;
+}
+
+h1{
+text-align:center;
+margin-bottom:30px;
+}
+
+input{
+width:100%;
+padding:12px;
+margin-top:10px;
+border-radius:8px;
+border:1px solid #ccc;
+}
+
+button{
+width:100%;
+padding:14px;
+margin-top:15px;
+border:none;
+background:#0a7a33;
+color:white;
+font-size:16px;
+border-radius:8px;
+cursor:pointer;
+}
+
+button:hover{
+background:#086128;
+}
+
+.result{
+font-size:20px;
+font-weight:bold;
+color:#0a7a33;
+margin-top:10px;
+}
+
+.comodo{
+border:1px solid #ddd;
+padding:15px;
+margin-top:15px;
+border-radius:8px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>MEDIDAS RESIDENCIAL JARDINS</h1>
+
+<div class="card resumo">
+
+<h2 style="font-size:18px;color:#555">Resumo – Residencial Jardins</h2>
+
+<p>🏠 Sala: 14,34 m²</p>
+<p>🛏 Quarto 01: 6,78 m²</p>
+<p>🛏 Quarto 02: 7,68 m²</p>
+
+<p><strong>Total:</strong> 28,80 m²</p>
+<p><strong>Com 10% de sobra:</strong> 31,68 m²</p>
+
+<p style="font-size:14px;color:#777">
+Piso 60x60 • Caixa: 2,2 m² • Aproximadamente 15 caixas
+</p>
+
+</div>
+
+<div class="card">
+
+<h2>Cômodos para cálculo</h2>
+
+<div id="comodos"></div>
+
+<button onclick="addComodo()">Adicionar Cômodo</button>
+
+</div>
+
+<div class="card">
+
+<h2>Configuração do Piso</h2>
+
+<label>Valor do piso por m²</label>
+<input type="number" id="valorMetro" placeholder="Ex: 35">
+
+<label>Rendimento da caixa (m²)</label>
+<input type="number" id="caixa" value="2.2">
+
+<button onclick="calcular()">Calcular Material</button>
+
+</div>
+
+<div class="card">
+
+<h2>Resultado</h2>
+
+<p class="result" id="areaTotal"></p>
+<p class="result" id="caixas"></p>
+<p class="result" id="valor"></p>
+<p class="result" id="argamassa"></p>
+<p class="result" id="rejunte"></p>
+<p class="result" id="rodape"></p>
+
+</div>
+
+</div>
+
+<script>
+
+let contador = 0;
+
+function addComodo(){
+
+contador++;
+
+let div = document.createElement("div");
+
+div.className = "comodo";
+
+div.innerHTML = `
+<h3>Cômodo ${contador}</h3>
+
+<label>Largura (m)</label>
+<input type="number" class="largura">
+
+<label>Comprimento (m)</label>
+<input type="number" class="comprimento">
+`;
+
+document.getElementById("comodos").appendChild(div);
+
+}
+
+function calcular(){
+
+let larguras = document.querySelectorAll(".largura");
+let comprimentos = document.querySelectorAll(".comprimento");
+
+let valorMetro = parseFloat(document.getElementById("valorMetro").value);
+let caixa = parseFloat(document.getElementById("caixa").value);
+
+let areaTotal = 0;
+let rodapeTotal = 0;
+
+for(let i=0;i<larguras.length;i++){
+
+let l = parseFloat(larguras[i].value);
+let c = parseFloat(comprimentos[i].value);
+
+if(!l || !c) continue;
+
+let area = l*c;
+
+areaTotal += area;
+
+rodapeTotal += (l*2)+(c*2);
+
+}
+
+let caixas = Math.ceil(areaTotal/caixa);
+let valor = areaTotal * valorMetro;
+
+let argamassa = Math.ceil(areaTotal/5);
+let rejunte = Math.ceil(areaTotal/10);
+
+document.getElementById("areaTotal").innerHTML =
+"📐 Área total: "+areaTotal.toFixed(2)+" m²";
+
+document.getElementById("caixas").innerHTML =
+"📦 Caixas de piso: "+caixas;
+
+document.getElementById("valor").innerHTML =
+"💰 Valor total do piso: R$ "+valor.toFixed(2);
+
+document.getElementById("argamassa").innerHTML =
+"🧱 Sacos de argamassa (20kg): "+argamassa;
+
+document.getElementById("rejunte").innerHTML =
+"⬜ Rejunte necessário (kg): "+rejunte;
+
+document.getElementById("rodape").innerHTML =
+"📏 Rodapé necessário: "+rodapeTotal.toFixed(2)+" m";
+
+}
+
+addComodo();
+
+</script>
+
+</body>
+</html>
